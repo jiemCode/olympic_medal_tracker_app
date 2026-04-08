@@ -24,6 +24,16 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      indent: ['error', 2],
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      'comma-dangle': ['error', 'always-multiline'],
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
+      'space-before-function-paren': ['error', 'never'],
+      'arrow-parens': ['error', 'always'],
+      'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
+      'eol-last': ['error', 'always'],
     },
   },
 ])
