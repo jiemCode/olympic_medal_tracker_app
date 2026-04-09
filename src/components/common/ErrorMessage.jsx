@@ -1,10 +1,11 @@
 const ErrorMessage = ({ message = 'Une erreur est survenue', onRetry }) => (
   <div className="flex flex-col items-center justify-center py-20 gap-4">
-    <p className="text-red-600 font-medium">{message}</p>
+    <p className="font-medium" style={{ color: '#2c4d14' }}>{message}</p>
     {onRetry && (
       <button
         onClick={onRetry}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+        className="text-white text-sm px-4 py-2 rounded transition-opacity hover:opacity-90"
+        style={{ backgroundColor: '#f58e03' }}
       >
         Réessayer
       </button>

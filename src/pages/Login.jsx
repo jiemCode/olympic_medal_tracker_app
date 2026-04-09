@@ -27,18 +27,17 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f6dcdd' }}>
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-blue-900 mb-2">
+
+        <h1 className="text-2xl font-bold text-center mb-1" style={{ color: '#2c4d14' }}>
           Olympic Medal Tracker
         </h1>
-        <p className="text-center text-gray-500 text-sm mb-8">
-          Connexion
-        </p>
+        <p className="text-center text-gray-500 text-sm mb-8">Connexion</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
               Nom d'utilisateur
             </label>
             <input
@@ -47,12 +46,15 @@ const Login = () => {
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               placeholder="darth"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
+              style={{ borderColor: '#2c4d14' }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #dde35f'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
               Mot de passe
             </label>
             <input
@@ -61,14 +63,18 @@ const Login = () => {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="********"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
+              style={{ borderColor: '#2c4d14' }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #dde35f'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-60 mt-2"
+            className="font-medium py-2 rounded-lg transition-opacity disabled:opacity-60 mt-2 text-white"
+            style={{ backgroundColor: '#f58e03' }}
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
