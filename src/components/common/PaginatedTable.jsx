@@ -19,9 +19,10 @@ const PaginatedTable = ({ totalPages, pageActuelle, onPageChange, children }) =>
             onClick={() => onPageChange(i)}
             className={`px-3 py-1 rounded border text-sm ${
               i === pageActuelle
-                ? 'bg-blue-600 text-white border-blue-600'
+                ? 'text-white'
                 : 'hover:bg-gray-100'
             }`}
+            style={{ backgroundColor: i === pageActuelle ? '#2c4d14' : 'inherit' }}
           >
             {i + 1}
           </button>

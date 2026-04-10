@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { classementService } from '../api/classementService'
 import Spinner from '../components/common/Spinner'
 import ErrorMessage from '../components/common/ErrorMessage'
+import ListPageTitle from '../components/common/ListPageTitle'
+import { FaRankingStar } from 'react-icons/fa6'
 
 const TRI_OPTIONS = [
   { value: null,     label: 'Total',  icon: '🏅' },
@@ -45,10 +47,11 @@ const Classement = () => {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold" style={{ color: '#2c4d14' }}>
-          🏅 Classement des Nations
-        </h1>
-        <p className="text-gray-500 text-sm mt-1">{data.length} pays</p>
+        <ListPageTitle
+          title="Classement des nations"
+          data={`Total ${data.length} pays`}
+          icon={FaRankingStar}
+        />
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -89,7 +92,7 @@ const Classement = () => {
               {data.map((item, index) => (
                 <tr
                   key={item.paysCode}
-                  onClick={() => navigate(`/pays/${item.paysCode}`)}
+                  onClick={() => navigate(`/pays/${item.paysId}`)}
                   className="cursor-pointer border-b transition-colors hover:opacity-80"
                   style={PODIUM_BG[index] ?? {}}
                 >
