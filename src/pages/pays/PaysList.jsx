@@ -10,6 +10,7 @@ import ConfirmModal from '../../components/common/ConfirmModal'
 import PaginatedTable from '../../components/common/PaginatedTable'
 import { FaArrowDown, FaArrowsUpDown, FaArrowUp, FaEarthAfrica } from 'react-icons/fa6'
 import ListPageTitle from '../../components/common/ListPageTitle'
+import TableSortIcon from '../../components/common/TableSortIcon'
 
 const PaysList = () => {
   const [data, setData] = useState({ contenu: [], totalPages: 0, totalElements: 0 })
@@ -47,10 +48,7 @@ const PaysList = () => {
   }
 
   const SortIcon = ({ field }) => {
-    // if (sortBy !== field) return <span className="text-gray-300 ml-1">↕</span>
-    if (sortBy !== field) return <FaArrowsUpDown className='inline'/>
-    // return <span className="ml-1" style={{ color: '#dde35f' }}>{direction === 'asc' && <FaArrowUp />}</span>
-    return direction === 'asc' ? <FaArrowUp className='inline' /> : <FaArrowDown className='inline'/>
+    return <TableSortIcon field={field} sortBy={sortBy} direction={direction} />
   }
 
   return (
