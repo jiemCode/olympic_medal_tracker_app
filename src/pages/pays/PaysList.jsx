@@ -19,20 +19,20 @@ const PaysList = () => {
   const [deleteId, setDeleteId] = useState(null)
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  const { page, sortBy, direction, setPage, toggleSort } = usePagination(10, 'nom')
+  const { page, sortBy, direction, setPage, toggleSort, params } = usePagination(10, 'nom')
 
   const fetchPays = useCallback(async() => {
     setLoading(true)
     setError(null)
     try {
-      const res = await paysService.getAll({ page, sortBy, direction, size: 10 })
+      const res = await paysService.getAll(params)
       setData(res.data)
     } catch {
       setError('Impossible de charger les pays')
     } finally {
       setLoading(false)
     }
-  }, [page, sortBy, direction])
+  }, [params])
 
   useEffect(() => { fetchPays() }, [fetchPays])
 

@@ -5,12 +5,7 @@ import { medailleService } from '../../api/medailleService'
 import useAuth from '../../hooks/useAuth'
 import Spinner from '../../components/common/Spinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
-
-const TYPE_STYLE = {
-  OR:     { bg: '#fff8e1', color: '#f58e03', icon: '🥇' },
-  ARGENT: { bg: '#f5f5f5', color: '#95a5a6', icon: '🥈' },
-  BRONZE: { bg: '#fef3e2', color: '#8B6914', icon: '🥉' },
-}
+import { TYPE_STYLE } from '../../constants/constants'
 
 const AthleteDetail = () => {
   const { id } = useParams()

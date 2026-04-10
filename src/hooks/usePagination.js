@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export const usePagination = (defaultSize = 10, defaultSort = 'nom') => {
   const [page, setPage] = useState(0)
@@ -16,7 +16,12 @@ export const usePagination = (defaultSize = 10, defaultSort = 'nom') => {
     setPage(0)
   }
 
-  const params = { page, size, sortBy, direction }
+  const params = useMemo(() => ({
+    page,
+    size,
+    sortBy,
+    direction,
+  }), [page, size, sortBy, direction])
 
   return { page, size, sortBy, direction, setPage, toggleSort, params }
 }

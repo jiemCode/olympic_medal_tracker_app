@@ -22,7 +22,7 @@ const AthletesList = () => {
   const [deleteId, setDeleteId] = useState(null)
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  const { page, sortBy, direction, setPage, toggleSort } = usePagination(10, 'nom')
+  const { page, sortBy, direction, setPage, toggleSort, params } = usePagination(10, 'nom')
 
   useEffect(() => {
     const fetchPays = async() => {
@@ -44,14 +44,14 @@ const AthletesList = () => {
         setData({ contenu: filtered.data, totalPages: 1, totalElements: filtered.data.length })
         return
       }
-      res = await athleteService.getAll({ page, sortBy, direction, filterPays })
+      res = await athleteService.getAll(params)
       setData(res.data)
     } catch {
       setError('Impossible de charger les athlètes')
     } finally {
       setLoading(false)
     }
-  }, [page, sortBy, direction, filterPays])
+  }, [params, filterPays])
 
   useEffect(() => { fetchAthletes() }, [fetchAthletes])
 
