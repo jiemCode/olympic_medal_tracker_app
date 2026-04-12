@@ -1,16 +1,66 @@
-# React + Vite
+# Olympic Medal Tracker Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application React pour l'API Olympic Medal Tracker - Système de suivi des médailles olympiques.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Node.js** 18+
+- **npm** 9+
+- L'API Olympic Medal Tracker [https://github.com/jiemCode/olympic_medal_tracker_api.git](https://github.com/jiemCode/olympic_medal_tracker_api.git)
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+git clone https://github.com/jiemCode/olympic_medal_tracker_app.git
+cd olympic_medal_tracker_app
+npm install
+```
 
-## Expanding the ESLint configuration
+## Configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Créer un fichier `.env` à la racine du projet :
+
+```env
+VITE_API_URL=http://localhost:8080/api/v2
+```
+
+> Modifier `VITE_API_URL` si l'API tourne sur un autre port ou host.
+
+## Lancement
+
+```bash
+# Dev
+npm run dev
+```
+
+L'application est accessible sur `http://localhost:5173`.
+
+```bash
+# Prod
+npm run build
+```
+
+## Stack
+
+| Technologie | Usage |
+|---|---|
+| React 18 + Vite | Framework et bundler |
+| React Router v6 | Navigation SPA |
+| Axios | Appels API + intercepteurs JWT |
+| Tailwind CSS | Styles utilitaires |
+| React Toastify | Notifications |
+
+## Structure
+
+```
+- src/
+- - api/                services Axios (auth, pays, athletes...)
+- - components/
+- - - common/           Spinner, FormField, ConfirmModal
+- - - layouts/          Navbar, Layout
+- - constants/          STATUTS, TYPES
+- - context/            AuthContext (token JWT, rôle)
+- - hooks/              useAuth, usePagination
+- - pages/
+- - router/             routes publiques et protégées
+```
