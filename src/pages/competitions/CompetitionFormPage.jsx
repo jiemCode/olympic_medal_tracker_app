@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { competitionService } from '../../api/competitionService'
 import { STATUTS } from '../../constants/constants'
+import FormField from '../../components/common/FormField'
+import BaseForm from '../../components/layouts/BaseForm'
 
 const INITIAL_FORM = {
   nom: '', discipline: '', dateDebut: '', dateFin: '', statut: 'PLANIFIEE',
@@ -37,6 +39,11 @@ const CompetitionFormPage = () => {
     }
     fetch()
   }, [id, isEdit, navigate])
+
+  const handleChange = (name, value) => {
+    setForm((f) => ({ ...f, [name]: value }))
+    setErrors((e) => ({ ...e, [name]: null }))
+  }
 
   const validate = () => {
     const errs = {}
@@ -98,77 +105,62 @@ const CompetitionFormPage = () => {
   )
 
   return (
-    <div className="max-w-lg mx-auto">
-      <button
-        onClick={() => navigate('/competitions')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux compétitions
-      </button>
+    <BaseForm title={isEdit ? 'Modifier la compétition' : 'Nouvelle compétition'} backUrl={'/competitions'} handleSubmit={handleSubmit}>
+      <>
+        <FormField name="nom"        label="Nom"        value={form.nom}        onChange={handleChange} error={errors.nom}        placeholder="ex: 100m Hommes" />
+        <FormField name="discipline" label="Discipline" value={form.discipline} onChange={handleChange} error={errors.discipline} placeholder="ex: Athlétisme" />
 
-      <div className="bg-white rounded-xl shadow p-8">
-        <h1 className="text-2xl font-bold mb-6" style={{ color: '#2c4d14' }}>
-          {isEdit ? 'Modifier la compétition' : 'Nouvelle compétition'}
-        </h1>
+        <div className="grid grid-cols-2 gap-4">
+          <FormField name="dateDebut" label="Date de début" value={form.dateDebut} onChange={handleChange} error={errors.dateDebut} type="date" />
+          <FormField name="dateFin"   label="Date de fin"   value={form.dateFin}   onChange={handleChange} error={errors.dateFin}   type="date" />
+        </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <Field name="nom"        label="Nom"        placeholder="ex: 100m Hommes" />
-          <Field name="discipline" label="Discipline" placeholder="ex: Athlétisme" />
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field name="dateDebut" label="Date de début" type="date" />
-            <Field name="dateFin"   label="Date de fin"   type="date" />
-          </div>
-
-          {/* Statut */}
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
+        <div>
+          <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
               Statut
-            </label>
-            <div className="flex gap-2">
-              {STATUTS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setForm({ ...form, statut: s })}
-                  className="flex-1 py-2 rounded-lg text-xs font-medium border transition-all"
-                  style={
-                    form.statut === s
-                      ? { backgroundColor: '#2c4d14', color: 'white', borderColor: '#2c4d14' }
-                      : { backgroundColor: 'white', color: '#2c4d14', borderColor: '#2c4d14' }
-                  }
-                >
-                  {s === 'PLANIFIEE' ? 'Planifiée' : s === 'EN_COURS' ? 'En cours' : 'Terminée'}
-                </button>
-              ))}
-            </div>
-            {errors.statut && (
-              <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.statut}</p>
-            )}
+          </label>
+          <div className="flex gap-2">
+            {STATUTS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setForm({ ...form, statut: s })}
+                className="flex-1 py-2 rounded-lg text-xs font-medium border transition-all"
+                style={
+                  form.statut === s
+                    ? { backgroundColor: '#2c4d14', color: 'white', borderColor: '#2c4d14' }
+                    : { backgroundColor: 'white', color: '#2c4d14', borderColor: '#2c4d14' }
+                }
+              >
+                {s === 'PLANIFIEE' ? 'Planifiée' : s === 'EN_COURS' ? 'En cours' : 'Terminée'}
+              </button>
+            ))}
           </div>
+          {errors.statut && (
+            <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.statut}</p>
+          )}
+        </div>
 
-          <div className="flex gap-3 mt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/competitions')}
-              className="flex-1 py-2 rounded-lg border text-sm font-medium"
-              style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
-            >
+        <div className="flex gap-3 mt-2">
+          <button
+            type="button"
+            onClick={() => navigate('/competitions')}
+            className="flex-1 py-2 rounded-lg border text-sm font-medium"
+            style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
+          >
               Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
-              style={{ backgroundColor: '#f58e03' }}
-            >
-              {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Créer'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
+            style={{ backgroundColor: '#f58e03' }}
+          >
+            {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Créer'}
+          </button>
+        </div>
+      </>
+    </BaseForm>
   )
 }
 

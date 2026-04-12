@@ -6,6 +6,9 @@ import { athleteService } from '../../api/athleteService'
 import { paysService } from '../../api/paysService'
 import { competitionService } from '../../api/competitionService'
 import { TYPE_STYLE, TYPES } from '../../constants/constants'
+import FormField from '../../components/common/FormField'
+import SelectField from '../../components/common/SelectField'
+import BaseForm from '../../components/layouts/BaseForm'
 
 const INITIAL_FORM = {
   type: '', dateObtention: '', athleteId: '', paysId: '', competitionId: '',
@@ -49,9 +52,9 @@ const MedailleFormPage = () => {
         setForm({
           type: m.type,
           dateObtention: m.dateObtention,
-          athleteId: '',
-          paysId: '',
-          competitionId: '',
+          athleteId: m.athleteId,
+          paysId: m.paysId,
+          competitionId: m.competitionId,
         })
       } catch {
         toast.error('Médaille introuvable')
@@ -60,6 +63,12 @@ const MedailleFormPage = () => {
     }
     fetchMedaille()
   }, [editId, isEdit, navigate])
+
+  const handleChange = (name, value) => {
+    if (name === 'athleteId') { handleAthleteChange(value); return }
+    setForm((f) => ({ ...f, [name]: value }))
+    setErrors((e) => ({ ...e, [name]: null }))
+  }
 
   const handleAthleteChange = (athleteId) => {
     const athlete = athletes.find((a) => a.id === Number(athleteId))
@@ -114,148 +123,80 @@ const MedailleFormPage = () => {
     }
   }
 
-  const SelectField = ({ name, label, children }) => (
-    <div>
-      <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
-        {label}
-      </label>
-      <select
-        value={form[name]}
-        onChange={(e) => {
-          if (name === 'athleteId') { handleAthleteChange(e.target.value); return }
-          setForm({ ...form, [name]: e.target.value })
-          setErrors({ ...errors, [name]: null })
-        }}
-        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
-        style={{ borderColor: errors[name] ? '#c0392b' : '#2c4d14' }}
-      >
-        <option value="">Sélectionner...</option>
-        {children}
-      </select>
-      {errors[name] && (
-        <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors[name]}</p>
-      )}
-    </div>
-  )
-
   return (
-    <div className="max-w-lg mx-auto">
-      <button
-        onClick={() => navigate('/medailles')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux médailles
-      </button>
-
-      <div className="bg-white rounded-xl shadow p-8">
-        <h1 className="text-2xl font-bold mb-6" style={{ color: '#2c4d14' }}>
-          {isEdit ? 'Modifier la médaille' : 'Attribuer une médaille'}
-        </h1>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-
-          {/* Type de médaille */}
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#2c4d14' }}>
+    <BaseForm title={isEdit ? 'Modifier la médaille' : 'Attribuer une médaille'} backUrl={'/medailles'} handleSubmit={handleSubmit}>
+      <>
+        <div>
+          <label className="block text-sm font-medium mb-2" style={{ color: '#2c4d14' }}>
               Type de médaille
-            </label>
-            <div className="flex gap-3">
-              {TYPES.map((type) => {
-                const style = TYPE_STYLE[type]
-                return (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => {
-                      setForm({ ...form, type })
-                      setErrors({ ...errors, type: null })
-                    }}
-                    className="flex-1 py-3 rounded-lg text-sm font-bold border-2 transition-all"
-                    style={
-                      form.type === type
-                        ? { backgroundColor: style.bg, color: style.color, borderColor: style.color }
-                        : { backgroundColor: 'white', color: '#888', borderColor: '#e5e7eb' }
-                    }
-                  >
-                    {style.icon} {type}
-                  </button>
-                )
-              })}
-            </div>
-            {errors.type && (
-              <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.type}</p>
-            )}
+          </label>
+          <div className="flex gap-3">
+            {TYPES.map((type) => {
+              const style = TYPE_STYLE[type]
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => {
+                    setForm({ ...form, type })
+                    setErrors({ ...errors, type: null })
+                  }}
+                  className="flex-1 py-3 rounded-lg text-sm font-bold border-2 transition-all"
+                  style={
+                    form.type === type
+                      ? { backgroundColor: style.bg, color: style.color, borderColor: style.color }
+                      : { backgroundColor: 'white', color: '#888', borderColor: '#e5e7eb' }
+                  }
+                >
+                  {style.icon} {type}
+                </button>
+              )
+            })}
           </div>
+          {errors.type && (
+            <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.type}</p>
+          )}
+        </div>
 
-          {/* Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
-              Date d'obtention
-            </label>
-            <input
-              type="date"
-              value={form.dateObtention}
-              onChange={(e) => {
-                setForm({ ...form, dateObtention: e.target.value })
-                setErrors({ ...errors, dateObtention: null })
-              }}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
-              style={{ borderColor: errors.dateObtention ? '#c0392b' : '#2c4d14' }}
-            />
-            {errors.dateObtention && (
-              <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.dateObtention}</p>
-            )}
-          </div>
+        <FormField name="dateObtention" label="Date d'obtention" value={form.dateObtention} onChange={handleChange} error={errors.dateObtention} type="date" />
 
-          {/* Athlète */}
-          <SelectField name="athleteId" label="Athlète">
-            {athletes.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.nom} {a.prenom} — {a.paysCode}
-              </option>
-            ))}
-          </SelectField>
+        <SelectField name="athleteId" label="Athlète" value={form.athleteId} onChange={handleChange} error={errors.athleteId}>
+          {athletes.map((a) => (
+            <option key={a.id} value={a.id}>{a.nom} {a.prenom} — {a.paysCode}</option>
+          ))}
+        </SelectField>
 
-          {/* Pays — auto-rempli mais modifiable */}
-          <SelectField name="paysId" label="Pays représenté">
-            {pays.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.drapeau} {p.nom}
-              </option>
-            ))}
-          </SelectField>
+        <SelectField name="paysId" label="Pays représenté" value={form.paysId} onChange={handleChange} error={errors.paysId}>
+          {pays.map((p) => (
+            <option key={p.id} value={p.id}>{p.drapeau} {p.nom}</option>
+          ))}
+        </SelectField>
 
-          {/* Compétition */}
-          <SelectField name="competitionId" label="Compétition">
-            {competitions.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nom} — {c.discipline}
-              </option>
-            ))}
-          </SelectField>
-
-          <div className="flex gap-3 mt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/medailles')}
-              className="flex-1 py-2 rounded-lg border text-sm font-medium"
-              style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
-            >
+        <SelectField name="competitionId" label="Compétition" value={form.competitionId} onChange={handleChange} error={errors.competitionId}>
+          {competitions.map((c) => (
+            <option key={c.id} value={c.id}>{c.nom} — {c.discipline}</option>
+          ))}
+        </SelectField>
+        <div className="flex gap-3 mt-2">
+          <button
+            type="button"
+            onClick={() => navigate('/medailles')}
+            className="flex-1 py-2 rounded-lg border text-sm font-medium"
+            style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
+          >
               Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
-              style={{ backgroundColor: '#f58e03' }}
-            >
-              {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Attribuer'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
+            style={{ backgroundColor: '#f58e03' }}
+          >
+            {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Attribuer'}
+          </button>
+        </div>
+      </>
+    </BaseForm>
   )
 }
 

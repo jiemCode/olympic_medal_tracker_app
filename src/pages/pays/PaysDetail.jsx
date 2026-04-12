@@ -6,6 +6,7 @@ import { athleteService } from '../../api/athleteService'
 import useAuth from '../../hooks/useAuth'
 import Spinner from '../../components/common/Spinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
+import BackButton from '../../components/common/BackButton'
 
 const StatCard = ({ label, value, color }) => (
   <div className="bg-white rounded-xl shadow p-5 text-center">
@@ -51,14 +52,7 @@ const PaysDetail = () => {
 
   return (
     <div>
-      {/* Retour */}
-      <button
-        onClick={() => navigate('/pays')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux pays
-      </button>
+      <BackButton path="/pays" />
 
       {/* En-tête pays */}
       <div

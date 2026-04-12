@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { athleteService } from '../../api/athleteService'
 import { paysService } from '../../api/paysService'
+import FormField from '../../components/common/FormField'
+import SelectField from '../../components/common/SelectField'
+import BaseForm from '../../components/layouts/BaseForm'
 
 const INITIAL_FORM = {
   nom: '', prenom: '', dateNaissance: '', discipline: '', paysId: '',
@@ -47,7 +50,12 @@ const AthleteFormPage = () => {
       }
     }
     fetchAthlete()
-  }, [id])
+  }, [id, isEdit, navigate])
+
+  const handleChange = (name, value) => {
+    setForm((f) => ({ ...f, [name]: value }))
+    setErrors((e) => ({ ...e, [name]: null }))
+  }
 
   const validate = () => {
     const errs = {}
@@ -108,73 +116,39 @@ const AthleteFormPage = () => {
   )
 
   return (
-    <div className="max-w-lg mx-auto">
-      <button
-        onClick={() => navigate('/athletes')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux athlètes
-      </button>
+    <BaseForm title={isEdit ? 'Modifier l\'athlète' : 'Nouvel athlète'} backUrl={'/athletes'} handleSubmit={handleSubmit}>
+      <>
+        <FormField name="nom"           label="Nom"              value={form.nom}           onChange={handleChange} error={errors.nom}           placeholder="ex: Faye" />
+        <FormField name="prenom"        label="Prénom"           value={form.prenom}        onChange={handleChange} error={errors.prenom}        placeholder="ex: Mbaye" />
+        <FormField name="dateNaissance" label="Date de naissance" value={form.dateNaissance} onChange={handleChange} error={errors.dateNaissance} type="date" />
+        <FormField name="discipline"    label="Discipline"       value={form.discipline}    onChange={handleChange} error={errors.discipline}    placeholder="ex: Lutte" />
 
-      <div className="bg-white rounded-xl shadow p-8">
-        <h1 className="text-2xl font-bold mb-6" style={{ color: '#2c4d14' }}>
-          {isEdit ? 'Modifier l\'athlète' : 'Nouvel athlète'}
-        </h1>
+        <SelectField name="paysId" label="Pays" value={form.paysId} onChange={handleChange} error={errors.paysId}>
+          {pays.map((p) => (
+            <option key={p.id} value={p.id}>{p.drapeau} {p.nom}</option>
+          ))}
+        </SelectField>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <Field name="nom"     label="Nom"             placeholder="ex: Faye" />
-          <Field name="prenom"  label="Prénom"          placeholder="ex: Mbaye" />
-          <Field name="dateNaissance" label="Date de naissance" type="date" />
-          <Field name="discipline"   label="Discipline"  placeholder="ex: Lutte" />
-
-          {/* Sélecteur pays */}
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
-              Pays
-            </label>
-            <select
-              value={form.paysId}
-              onChange={(e) => {
-                setForm({ ...form, paysId: e.target.value })
-                setErrors({ ...errors, paysId: null })
-              }}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
-              style={{ borderColor: errors.paysId ? '#c0392b' : '#2c4d14' }}
-            >
-              <option value="">Sélectionner un pays</option>
-              {pays.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.drapeau} {p.nom}
-                </option>
-              ))}
-            </select>
-            {errors.paysId && (
-              <p className="text-xs mt-1" style={{ color: '#c0392b' }}>{errors.paysId}</p>
-            )}
-          </div>
-
-          <div className="flex gap-3 mt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/athletes')}
-              className="flex-1 py-2 rounded-lg border text-sm font-medium"
-              style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
-            >
+        <div className="flex gap-3 mt-2">
+          <button
+            type="button"
+            onClick={() => navigate('/athletes')}
+            className="flex-1 py-2 rounded-lg border text-sm font-medium"
+            style={{ borderColor: '#2c4d14', color: '#2c4d14' }}
+          >
               Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
-              style={{ backgroundColor: '#f58e03' }}
-            >
-              {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Créer'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90"
+            style={{ backgroundColor: '#f58e03' }}
+          >
+            {loading ? 'Enregistrement...' : isEdit ? 'Mettre à jour' : 'Créer'}
+          </button>
+        </div>
+      </>
+    </BaseForm>
   )
 }
 

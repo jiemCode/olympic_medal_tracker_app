@@ -6,6 +6,7 @@ import useAuth from '../../hooks/useAuth'
 import Spinner from '../../components/common/Spinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
 import { STATUT_STYLE, TYPE_STYLE } from '../../constants/constants'
+import BackButton from '../../components/common/BackButton'
 
 const CompetitionDetail = () => {
   const { id } = useParams()
@@ -48,13 +49,7 @@ const CompetitionDetail = () => {
 
   return (
     <div>
-      <button
-        onClick={() => navigate('/competitions')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux compétitions
-      </button>
+      <BackButton path="/competitions" />
 
       {/* En-tête */}
       <div

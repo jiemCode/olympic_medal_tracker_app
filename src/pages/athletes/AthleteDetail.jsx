@@ -6,6 +6,7 @@ import useAuth from '../../hooks/useAuth'
 import Spinner from '../../components/common/Spinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
 import { TYPE_STYLE } from '../../constants/constants'
+import BackButton from '../../components/common/BackButton'
 
 const AthleteDetail = () => {
   const { id } = useParams()
@@ -45,13 +46,7 @@ const AthleteDetail = () => {
 
   return (
     <div>
-      <button
-        onClick={() => navigate('/athletes')}
-        className="text-sm mb-6 hover:underline flex items-center gap-1"
-        style={{ color: '#2c4d14' }}
-      >
-        ← Retour aux athlètes
-      </button>
+      <BackButton path="/athletes" />
 
       {/* En-tête athlète */}
       <div

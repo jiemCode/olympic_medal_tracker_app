@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useAuth from '../hooks/useAuth'
+import authService from '../api/authService'
 
 const Login = () => {
   const { login } = useAuth()
@@ -12,15 +13,15 @@ const Login = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     setLoading(true)
-
     try {
-      if (form.username === 'darth' && form.password === 'vador7') {
-        login('jwt-token')
-        toast.success('Connexion réussie !')
-        navigate('/classement')
-      } else {
-        toast.error('Identifiants incorrects')
-      }
+      const res = await authService.login(form.username, form.password)
+      login(res.data.token, res.data.role)
+      toast.success('Connexion réussie !')
+      navigate('/classement')
+    } catch (err) {
+      const status = err.response?.status
+      if (status === 401) toast.error('Identifiants incorrects')
+      else toast.error('Erreur de connexion')
     } finally {
       setLoading(false)
     }
@@ -29,7 +30,6 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f6dcdd' }}>
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-
         <h1 className="text-2xl font-bold text-center mb-1" style={{ color: '#2c4d14' }}>
           Olympic Medal Tracker
         </h1>
@@ -48,11 +48,8 @@ const Login = () => {
               placeholder="darth"
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
               style={{ borderColor: '#2c4d14' }}
-              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #dde35f'}
-              onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: '#2c4d14' }}>
               Mot de passe
@@ -65,8 +62,6 @@ const Login = () => {
               placeholder="********"
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
               style={{ borderColor: '#2c4d14' }}
-              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #dde35f'}
-              onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
           </div>
 
